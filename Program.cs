@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Security.Cryptography;
 
 internal class Program {
 	private static void Main(string[] args) {
@@ -60,7 +61,23 @@ internal class Program {
 	}
 
 	private static void NGuess() {
-		throw new NotImplementedException();
+		bool found = false;
+		int start = 0, end = 1024, mid = 512;
+		while(!found) {
+			string[] src = GenericInput($"Este numarul mai mare sau egal cu {mid}(y/n): ");
+
+			if(src[0] == "y") {
+				src = GenericInput($"Este numarul egal cu {mid}(y/n): ");
+				if(src[0] == "y") found = true;
+				else if(src[0] == "n") {
+					start = mid; mid = (start + end) / 2;
+				}
+			}
+			else if(src[0] == "n") {
+				end = mid; mid = (start + end) / 2;
+			}
+		}
+		Console.WriteLine($"Numarul este {mid}");
 	}
 
 	private static void Fraction() {
@@ -71,8 +88,23 @@ internal class Program {
 		throw new NotImplementedException();
 	}
 
-	private static void FPrimes() {
-		throw new NotImplementedException();
+	private static void FPrimes(int n = 0, bool main = true) {
+		if(main == true) {
+			int[] src = IntInput("Dati n: ");
+			if(src == null) throw new Exception("Null Input");
+			n = src[0];
+		}
+
+		Console.Write("Factorii primi sunt: ");
+		for(int i = 2; i <= n; i++) {
+			if(NPrime(i, false)) {
+				while(n % i == 0) {
+					Console.Write($"{i} ");
+					n /= i;
+				}
+			}		
+		}
+		Console.Write("\n");
 	}
 
 	private static void CMM_DM_C() {
@@ -180,7 +212,7 @@ internal class Program {
 		if(n < 2) ok = false;
 		else if(n > 2) {
 			int stop = (int)Math.Sqrt(n);
-			for(int i = 3; i <= stop; i += 1)
+			for(int i = 3; i <= stop; i += 2)
 				if(n % i == 0) {ok = false; break; }
 		}
 
@@ -419,6 +451,14 @@ internal class Program {
 			Console.WriteLine($"ERROR: {e}");
 			return null;
 		}
+	}
+
+	private static string[] GenericInput(string txt) {
+		Console.Write(txt);
+		char[] sep = { ' ', '.', ',', ';' };
+		string[] src = Console.ReadLine().Split(sep, StringSplitOptions.RemoveEmptyEntries);
+		if(src.Length == 0) throw new Exception("Empty Input");
+		return src;
 	}
 }
 /*
