@@ -80,31 +80,63 @@ internal class Program {
 		Console.WriteLine($"Numarul este {mid}");
 	}
 
-	private static void Fraction() {
-		throw new NotImplementedException();
+	private static void Fraction(int n = 0, int m = 0, bool main = true) {
+		if(main == true) {
+			int[] src = IntInput("Dati n / m: ");
+			if(src == null) throw new Exception("Null Input");
+			n = src[0]; m = src[1];
+		}
+
+		int[] fpm = FPrimes(m, false);
+		bool np = (IntInArray(2, fpm) && IntInArray(5, fpm));
+
+		double div = (float)n / (float)m;
+		if(np == false) { 
+				
+		} else if(np == true && fpm.Length == 2) {
+			Console.WriteLine($"{n}/{m} = {div}");
+		} else {
+
+		}
 	}
 
 	private static void Rep2Cif() {
 		throw new NotImplementedException();
 	}
 
-	private static void FPrimes(int n = 0, bool main = true) {
+	private static int[] FPrimes(int n = 0, bool main = true) {
 		if(main == true) {
 			int[] src = IntInput("Dati n: ");
 			if(src == null) throw new Exception("Null Input");
 			n = src[0];
 		}
 
-		Console.Write("Factorii primi sunt: ");
+		int fLast = 0;
+		List<int> fs = new List<int>();
 		for(int i = 2; i <= n; i++) {
 			if(NPrime(i, false)) {
 				while(n % i == 0) {
-					Console.Write($"{i} ");
+					if(i != fLast) { fLast = i;	fs.Add(i);	}
 					n /= i;
 				}
 			}		
 		}
-		Console.Write("\n");
+
+		int[] toR = new int[fs.Count];
+		int k = 0;
+		foreach(int i in fs) {
+			toR[k] = i;
+			k++;
+		}
+
+		if(main == true) {
+			Console.Write("Factorii primi sunt: ");
+			foreach(int i in fs) {
+				Console.Write($"{i} ");
+			}
+			Console.Write("\n");
+		}
+		return toR;
 	}
 
 	private static void CMM_DM_C() {
@@ -113,11 +145,22 @@ internal class Program {
 
 	private static void Asc5(int a = 0, int b = 0, int c = 0, int d = 0, int e = 0, bool main = true) {
 		if(main == true) {
-			int[] src = IntInput("Dati 3 numere: ");
+			int[] src = IntInput("Dati 5 numere: ");
 			if(src == null) throw new Exception("Null Input");
 			a = src[0]; b = src[1]; c = src[2]; d = src[3]; e = src[4];
 		}
 
+		bool ok;
+		do {
+			ok = true;
+			if(a > b) { (a, b) = (b, a); ok = false; }
+			if(b > c) { (b, c) = (c, b); ok = false; }
+			if(c > d) { (c, d) = (d, c); ok = false; }
+			if(d > e) { (d, e) = (e, d); ok = false; }
+
+		} while(ok == false);
+
+		if(main == true)	Console.WriteLine($"{a} {b} {c} {d} {e}");
 	}
 
 	private static void Asc3(int a = 0, int b = 0, int c = 0, bool main = true) {
@@ -427,7 +470,7 @@ internal class Program {
 	private static int[] IntInput(string txt) {
 		try {
 			Console.Write(txt);
-			char[] sep = { ' ', '.', ',', ';' };
+			char[] sep = { ' ', '.', ',', ';', '/' };
 			string[] src = Console.ReadLine().Split(sep, StringSplitOptions.RemoveEmptyEntries);
 			if(src.Length == 0) {
 				return null;
@@ -455,10 +498,17 @@ internal class Program {
 
 	private static string[] GenericInput(string txt) {
 		Console.Write(txt);
-		char[] sep = { ' ', '.', ',', ';' };
+		char[] sep = { ' ', '.', ',', ';', '/' };
 		string[] src = Console.ReadLine().Split(sep, StringSplitOptions.RemoveEmptyEntries);
 		if(src.Length == 0) throw new Exception("Empty Input");
 		return src;
+	}
+
+	private static bool IntInArray(int n, int[] array) {
+		foreach(int i in array) {
+			if(i == n) return true;
+		}
+		return false;
 	}
 }
 /*
