@@ -24,8 +24,8 @@ internal class Program {
 			"\t18. Descompunerea in factori primi ai unui număr n\n" +
 			"\t19. N format doar cu 2 cifre care se pot repeta\n" +
 			"\t20. Fractia m/n in format zecimal, cu perioada intre paranteze\n" +
-			"\t21. N intre 1 si 1024 prin intrebari" +
-			"\t0. Exit program\n");
+			"\t21. N intre 1 si 1024 prin intrebari\n" +
+			"\t0. Exit program (or empty input)\n");
 
 		bool ok = true;
 		while(ok == true) {
@@ -238,18 +238,19 @@ internal class Program {
 		return ok;
 	}
 
-	private static void IntvBisect(int an = 0, int a = 0, int b = 0, bool main = true) {
+	private static void IntvBisect(int a = 0, int b = 0, bool main = true) {
 		if(main == true) {
-			int[] src = IntInput("Dati anul si capetele a si b ale intervalului: ");
+			int[] src = IntInput("Dati capetele a si b ale intervalului: ");
 			if(src == null) throw new Exception("Null Input");
-			an = src[0]; a = src[1]; b = src[2];
+			a = src[0]; b = src[1];
 		}
 
 		for(int i = a; i <= b; i++) {
-			if(i % an == 0) {
+			if(i % 4 == 0) {
 				if(main == true) Console.Write($"{i}, ");
 			}
 		}
+		if(main == true) Console.Write("\n");
 	}
 
 	private static int IntvDivN(int n = 0, int a = 0, int b = 0, bool main = true) {
