@@ -4,7 +4,6 @@ using System.Security.Cryptography;
 internal class Program {
 	private static void Main(string[] args) {
 		Console.WriteLine("Fundamentele Programarii - Setul 1 de probleme:\n" +
-			"\t0. Exit program\n" +
 			"\t1. Ecuatia de gradul 1\n" +
 			"\t2. Ecuatia de gradul 2\n" +
 			"\t3. K divide N\n" +
@@ -25,12 +24,12 @@ internal class Program {
 			"\t18. Descompunerea in factori primi ai unui număr n\n" +
 			"\t19. N format doar cu 2 cifre care se pot repeta\n" +
 			"\t20. Fractia m/n in format zecimal, cu perioada intre paranteze\n" +
-			"\t21. N intre 1 si 1024 prin intrebari");
-		
+			"\t21. N intre 1 si 1024 prin intrebari" +
+			"\t0. Exit program\n");
+
 		bool ok = true;
 		while(ok == true) {
 			int[] src = IntInput("Introduceti numarul problemei: ");
-			//Console.WriteLine($"DEBUG: src = {src}");
 			int opt = src == null ? 0 : src[0];
 			switch(opt) {
 				case 1:		Ec1();			break;
@@ -54,7 +53,10 @@ internal class Program {
 				case 19:	Rep2Cif();		break;
 				case 20:	Fraction();		break;
 				case 21:	NGuess();		break;
-				case 0:		ok = false;		break;
+				case 0:
+					ok = false;
+					Console.WriteLine("Iesire din program");
+					break;
 				default:	Console.WriteLine("Numarul Problemei este invalid");	break;
 			}
 		}
@@ -100,8 +102,35 @@ internal class Program {
 		}
 	}
 
-	private static void Rep2Cif() {
-		throw new NotImplementedException();
+	private static bool Rep2Cif(int n = 0, bool main = true) {
+		if(main == true) {
+			int[] src = IntInput("Dati n: ");
+			if(src == null) throw new Exception("Null Input");
+			n = src[0];
+		}
+
+		int k = 0;
+		int[] cif = new int[10];
+		while(n != 0) {
+			k++;
+			cif[n % 10]++;
+			n /= 10;
+		}
+
+		int s = 0;
+		for(int i = 0; i < 10; i++) {
+			if(cif[i] > 0) s++;
+		}
+
+		bool ok = true;
+		if(s > 2) ok = false;
+
+		if(main == true) {
+			if(ok) Console.WriteLine($"Numarul este valid, fiind compus din {k} cifre cu {s} valori");
+			else Console.WriteLine($"Numarul este nu valid, fiind compus din {k} cifre cu {s} valori");
+		}
+
+		return ok;
 	}
 
 	private static int[] FPrimes(int n = 0, bool main = true) {
@@ -112,7 +141,7 @@ internal class Program {
 		}
 
 		int fLast = 0;
-		List<int> fs = new List<int>();
+		List<int> fs = new();
 		for(int i = 2; i <= n; i++) {
 			if(NPrime(i, false)) {
 				while(n % i == 0) {
@@ -139,8 +168,26 @@ internal class Program {
 		return toR;
 	}
 
-	private static void CMM_DM_C() {
-		throw new NotImplementedException();
+	private static int[] CMM_DM_C(int a = 0, int b = 0, bool main = true) {
+		if(main == true) {
+			int[] src = IntInput("Dati a si b: ");
+			if(src == null) throw new Exception("Null Input");
+			a = src[0]; b = src[1];
+		}
+
+		int initA = a, initB = b, c;
+		while(b != 0) {
+			c = a % b;
+			a = b;
+			b = c;
+		}
+
+		int CMMDC = a;
+		int CMMMC = (initA * initB) / CMMDC;
+		if(main == true) Console.WriteLine($"CMMDC: {CMMDC}, CMMMC: {CMMMC}");
+
+		int[] toR = { CMMDC, CMMMC };
+		return toR;
 	}
 
 	private static void Asc5(int a = 0, int b = 0, int c = 0, int d = 0, int e = 0, bool main = true) {
@@ -182,7 +229,7 @@ internal class Program {
 			n = src[0];
 		}
 
-		bool ok = (n == ReverseN(n, false));
+		bool ok = (Math.Abs(n) == ReverseN(n, false));
 		if(main == true) {
 			if(ok) Console.WriteLine($"{n} este palidrom");
 			else Console.WriteLine($"{n} nu este palindrom");
@@ -231,6 +278,7 @@ internal class Program {
 			n = src[0];
 		}
 
+		n = Math.Abs(n);
 		int rev = 0;
 		while(n > 0) {
 			rev = rev * 10 + n % 10;
