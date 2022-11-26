@@ -1,7 +1,4 @@
-﻿using System.ComponentModel;
-using System.Security.Cryptography;
-
-internal class Program {
+﻿internal class Program {
 	private static void Main(string[] args) {
 		Console.WriteLine("Fundamentele Programarii - Setul 1 de probleme:\n" +
 			"\t1. Ecuatia de gradul 1\n" +
@@ -32,32 +29,32 @@ internal class Program {
 			int[] src = IntInput("Introduceti numarul problemei: ");
 			int opt = src == null ? 0 : src[0];
 			switch(opt) {
-				case 1:		Ec1();			break;
-				case 2:		Ec2();			break;
-				case 3:		NdivK();		break;
-				case 4:		Bisect();		break;
-				case 5:		KcifN();		break;
-				case 6:		ABCTri();		break;
-				case 7:		Swap1();		break;
-				case 8:		Swap2();		break;
-				case 9:		AllDivN();		break;
-				case 10:	NPrime();		break;
-				case 11:	ReverseN();		break;
-				case 12:	IntvDivN();		break;
-				case 13:	IntvBisect();	break;
-				case 14:	NPalindrom();	break;
-				case 15:	Asc3();			break;
-				case 16:	Asc5();			break;
-				case 17:	CMM_DM_C();		break;
-				case 18:	FPrimes();		break;
-				case 19:	Rep2Cif();		break;
-				case 20:	Fraction();		break;
-				case 21:	NGuess();		break;
+				case 1: Ec1(); break;
+				case 2: Ec2(); break;
+				case 3: NdivK(); break;
+				case 4: Bisect(); break;
+				case 5: KcifN(); break;
+				case 6: ABCTri(); break;
+				case 7: Swap1(); break;
+				case 8: Swap2(); break;
+				case 9: AllDivN(); break;
+				case 10: NPrime(); break;
+				case 11: ReverseN(); break;
+				case 12: IntvDivN(); break;
+				case 13: IntvBisect(); break;
+				case 14: NPalindrom(); break;
+				case 15: Asc3(); break;
+				case 16: Asc5(); break;
+				case 17: CMMMDC_CMMMC(); break;
+				case 18: FPrimes(); break;
+				case 19: Rep2Cif(); break;
+				case 20: Fraction(); break;
+				case 21: NGuess(); break;
 				case 0:
 					ok = false;
 					Console.WriteLine("Iesire din program");
 					break;
-				default:	Console.WriteLine("Numarul Problemei este invalid");	break;
+				default: Console.WriteLine("Numarul Problemei este invalid"); break;
 			}
 		}
 	}
@@ -74,8 +71,7 @@ internal class Program {
 				else if(src[0] == "n") {
 					start = mid; mid = (start + end) / 2;
 				}
-			}
-			else if(src[0] == "n") {
+			} else if(src[0] == "n") {
 				end = mid; mid = (start + end) / 2;
 			}
 		}
@@ -89,16 +85,46 @@ internal class Program {
 			n = src[0]; m = src[1];
 		}
 
-		int[] fpm = FPrimes(m, false);
-		bool np = (IntInArray(2, fpm) && IntInArray(5, fpm));
+		// Adapted from https://github.com/HoreaOros/ROSE2020/blob/master/2611/Program.cs / fractie2
 
-		double div = (float)n / (float)m;
-		if(np == false) { 
-				
-		} else if(np == true && fpm.Length == 2) {
-			Console.WriteLine($"{n}/{m} = {div}");
+		int IntPart, FractionPart;
+		IntPart = m / n;
+		FractionPart = m % n;
+
+		int digit, remainder;
+		List<int> Remainders = new List<int>();
+		List<int> Digits = new List<int>();
+		Remainders.Add(FractionPart);
+
+		bool periodic = false;
+		do {
+			digit = FractionPart * 10 / n;
+			Digits.Add(digit);
+
+			remainder = FractionPart * 10 % n;
+			if(Remainders.Contains(remainder) == false) {
+				Remainders.Add(remainder);
+			} else {
+				periodic = true;
+				break;
+			}
+			FractionPart = remainder;
+		} while(remainder != 0);
+
+
+		Console.Write($"{IntPart}.");
+		if(!periodic) {
+			foreach(var item in Digits) {
+				Console.Write(item);
+			}
 		} else {
-
+			for(int i = 0; i < Remainders.Count; i++) {
+				if(Remainders[i] == remainder) {
+					Console.Write("(");
+				}
+				Console.Write(Digits[i]);
+			}
+			Console.WriteLine(")");
 		}
 	}
 
@@ -145,10 +171,10 @@ internal class Program {
 		for(int i = 2; i <= n; i++) {
 			if(NPrime(i, false)) {
 				while(n % i == 0) {
-					if(i != fLast) { fLast = i;	fs.Add(i);	}
+					if(i != fLast) { fLast = i; fs.Add(i); }
 					n /= i;
 				}
-			}		
+			}
 		}
 
 		int[] toR = new int[fs.Count];
@@ -168,7 +194,7 @@ internal class Program {
 		return toR;
 	}
 
-	private static int[] CMM_DM_C(int a = 0, int b = 0, bool main = true) {
+	private static int[] CMMMDC_CMMMC(int a = 0, int b = 0, bool main = true) {
 		if(main == true) {
 			int[] src = IntInput("Dati a si b: ");
 			if(src == null) throw new Exception("Null Input");
@@ -207,7 +233,7 @@ internal class Program {
 
 		} while(ok == false);
 
-		if(main == true)	Console.WriteLine($"{a} {b} {c} {d} {e}");
+		if(main == true) Console.WriteLine($"{a} {b} {c} {d} {e}");
 	}
 
 	private static void Asc3(int a = 0, int b = 0, int c = 0, bool main = true) {
@@ -305,7 +331,7 @@ internal class Program {
 		else if(n > 2) {
 			int stop = (int)Math.Sqrt(n);
 			for(int i = 3; i <= stop; i += 2)
-				if(n % i == 0) {ok = false; break; }
+				if(n % i == 0) { ok = false; break; }
 		}
 
 		if(main == true) {
@@ -390,7 +416,7 @@ internal class Program {
 		int cif = -1, initK = k, initN = n;
 		while(k > 0 && n != 0) {
 			cif = n % 10;
-			n /= 10; 
+			n /= 10;
 			k--;
 		}
 
@@ -410,7 +436,7 @@ internal class Program {
 			an = src[0];
 		}
 
-		bool div = NdivK(n: an, k: 4, main:false);
+		bool div = NdivK(n: an, k: 4, main: false);
 		if(main == true) {
 			if(div) Console.WriteLine($"Anul {an} este bisect");
 			else Console.WriteLine($"Anul {an} nu este bisect");
@@ -524,12 +550,12 @@ internal class Program {
 			if(src.Length == 0) {
 				return null;
 				//throw new Exception("Empty Input");
-			} 
+			}
 			int[] output = new int[src.Length];
 			int i = 0;
 			foreach(string s in src) {
 				//Console.WriteLine($"DEBUG: input {i} = {s}");
-				checked {output[i] = int.Parse(s);}
+				checked { output[i] = int.Parse(s); }
 				i++;
 			}
 			return output;
